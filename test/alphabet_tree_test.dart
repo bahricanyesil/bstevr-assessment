@@ -66,5 +66,23 @@ void main() {
       ]);
       expect(tree.compareAll(AlphabetTree(finalRoot)), true);
     });
+
+    test("Node deletion test", () {
+      final deleteNode = Node("S", [Node("L", [])]);
+      final root1 = Node("Z", [
+        Node("T", [deleteNode]),
+        Node("I", [Node("Y", [])]),
+        Node("D", [Node("P", [])])
+      ]);
+      final tree = AlphabetTree(root1);
+      tree.removeNode(nodeKey: deleteNode.uniqueKey);
+
+      final finalRoot = Node("Z", [
+        Node("T", [Node("L", [])]),
+        Node("I", [Node("Y", [])]),
+        Node("D", [Node("P", [])])
+      ]);
+      expect(tree.compareAll(AlphabetTree(finalRoot)), true);
+    });
   });
 }

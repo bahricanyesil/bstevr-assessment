@@ -39,6 +39,21 @@ class AlphabetTree {
     }
   }
 
+  void removeNode({required Key nodeKey, Node? node}) {
+    node ??= root;
+    for (var i = 0; i < node.children.length; i++) {
+      final elIndex = node.children[i].children
+          .indexWhere((element) => element.uniqueKey == nodeKey);
+      if (elIndex != -1) {
+        final oldChildren = node.children[i].children[elIndex].children;
+        node.children[i].children.removeAt(elIndex);
+        node.children[i].children.addAll(oldChildren);
+      } else {
+        removeNode(nodeKey: nodeKey, node: node.children[i]);
+      }
+    }
+  }
+
   bool compareAll(AlphabetTree tree) {
     if (tree.root.value != root.value) {
       return false;
