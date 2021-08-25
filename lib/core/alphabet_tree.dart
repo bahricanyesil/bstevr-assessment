@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
+
 import 'node.dart';
 
 class AlphabetTree {
@@ -24,5 +26,34 @@ class AlphabetTree {
       elements.add(otherRoot.children[i].value);
       getElementsWithDFS(otherRoot.children[i], elements);
     }
+  }
+
+  void addNode({required Key parentKey, required Node newNode, Node? node}) {
+    node ??= root;
+    for (var i = 0; i < node.children.length; i++) {
+      if (node.children[i].uniqueKey == parentKey) {
+        node.children[i].children.add(newNode);
+      } else {
+        addNode(parentKey: parentKey, newNode: newNode, node: node.children[i]);
+      }
+    }
+  }
+
+  bool compareAll(AlphabetTree tree) {
+    if (tree.root.value != root.value) {
+      return false;
+    }
+    return compareDfs(tree.root, root);
+  }
+
+  bool compareDfs(Node node, Node otherNode) {
+    for (var i = 0; i < node.children.length; i++) {
+      if (node.children[i].value != otherNode.children[i].value) {
+        return false;
+      } else {
+        compareDfs(node.children[i], otherNode.children[i]);
+      }
+    }
+    return true;
   }
 }
