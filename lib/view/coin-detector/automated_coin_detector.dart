@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
@@ -32,10 +33,15 @@ class _CoinDetectorState extends State<CoinDetector>
   static final Animatable<double> _halfTween =
       Tween<double>(begin: 0.0, end: 0.5);
   final List<dynamic> _expandedKeys = [];
+  late Uint8List bytes;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      bytes = await (await AudioCache().loadAsFile('sound/coin_sound.mp3'))
+          .readAsBytes();
+    });
     _randomStream = Stream.periodic(const Duration(seconds: 3), (int val) {
       final random = Random().nextInt(2);
       if (_elementKey.currentState != null) {
@@ -44,14 +50,8 @@ class _CoinDetectorState extends State<CoinDetector>
         _items.insert(
             0, {'name': random == 0 ? 'Real' : 'Fake', 'date': DateTime.now()});
         if (random == 0) {
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-            final bytes =
-                await (await _audioCache.loadAsFile('sound/coin_sound.mp3'))
-                    .readAsBytes();
-            await _audioCache.playBytes(bytes);
-          });
+          _audioCache.playBytes(bytes);
         }
-        setState(() {});
       }
       return random == 0 ? 'Real' : 'Fake';
     });
@@ -135,7 +135,7 @@ class _CoinDetectorState extends State<CoinDetector>
           child: StatefulBuilder(
               builder: (BuildContext context, StateSetter _setState) {
             Timer.periodic(const Duration(seconds: 1), (timer) {
-              _setState(() {});
+              if (!mounted) _setState(() {});
             });
             return Card(
               color: item['name'] == 'Real' ? Colors.green : Colors.red,
@@ -158,9 +158,13 @@ class _CoinDetectorState extends State<CoinDetector>
                   ),
                 ],
                 onExpansionChanged: (bool val) {
+                  print(item['name']);
                   setState(() {
                     if (val && !_expandedKeys.contains(index)) {
                       _expandedKeys.add(item);
+                      if (item['name'] == 'Real') {
+                        _audioCache.playBytes(bytes);
+                      }
                     } else {
                       _expandedKeys.remove(item);
                     }
