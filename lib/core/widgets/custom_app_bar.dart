@@ -3,14 +3,14 @@ import '../core_shelf.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final Function(int index) toggleAction;
-  final List<bool> isSelected;
+  final Function() toggleAction;
+  final bool toggleValue;
   final double size;
   const CustomAppBar({
     Key? key,
     required this.title,
     required this.toggleAction,
-    required this.isSelected,
+    required this.toggleValue,
     required this.size,
   }) : super(key: key);
 
@@ -29,22 +29,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: TextStyle(
           color: context.primaryColor,
-          fontSize: context.fontSize * 3,
+          fontSize: context.fontSize * 4,
           fontWeight: FontWeight.w600,
         ),
       );
 
   Widget getMainContainer(BuildContext context) => Center(
-        child: toggleButton(),
-      );
-
-  Widget toggleButton() => ToggleButtons(
-        children: <Widget>[
-          Icon(Icons.play_arrow_outlined, color: Colors.green[400]),
-          Icon(Icons.pause_circle_outline_outlined, color: Colors.red[400]),
-        ],
-        onPressed: toggleAction,
-        isSelected: isSelected,
+        child: CustomSwitchButton(
+            toggleValue: toggleValue, toggleAction: toggleAction),
       );
 
   @override

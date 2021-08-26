@@ -15,31 +15,51 @@ class CoinDetector extends StatefulWidget {
   _CoinDetectorState createState() => _CoinDetectorState();
 }
 
-class _CoinDetectorState extends State<CoinDetector> {
+class _CoinDetectorState extends State<CoinDetector>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _elementKey =
       GlobalKey<AnimatedListState>();
   List<String> _items = [];
-  final Stream<String> _randomStream =
-      Stream.periodic(const Duration(seconds: 3), (int val) {
-    final random = Random().nextInt(2);
-    return random == 0 ? 'Real' : 'Fake';
-  });
-  final List<bool> isSelected = [true, false];
+  late Stream<String> _randomStream;
+  bool _toggleValue = false;
   final StreamController _streamController = StreamController.broadcast();
   late StreamSubscription<String> _streamSubscription;
-  final AudioPlayer _advancedPlayer = AudioPlayer();
-
+  late AnimationController _animationController;
+  final AudioCache _audioCache = AudioCache();
+  final Duration _kExpand = const Duration(milliseconds: 200);
+  static final Animatable<double> _easeInTween =
+      CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _halfTween =
+      Tween<double>(begin: 0.0, end: 0.5);
   @override
   void initState() {
     super.initState();
+    _randomStream = Stream.periodic(const Duration(seconds: 3), (int val) {
+      final random = Random().nextInt(2);
+      if (_elementKey.currentState != null) {
+        _elementKey.currentState!
+            .insertItem(0, duration: const Duration(milliseconds: 500));
+        _items = [random == 0 ? 'Real' : 'Fake', ..._items];
+        if (random == 0) {
+          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+            final bytes =
+                await (await _audioCache.loadAsFile('sound/coin_sound.mp3'))
+                    .readAsBytes();
+            await _audioCache.playBytes(bytes);
+          });
+        }
+      }
+      return random == 0 ? 'Real' : 'Fake';
+    });
     _streamSubscription = _randomStream.listen(_streamController.add);
+    _animationController = AnimationController(duration: _kExpand, vsync: this);
 
     if (kIsWeb) {
       // Calls to Platform.isIOS fails on web
       return;
     }
     if (Platform.isIOS) {
-      _advancedPlayer.notificationService.startHeadlessService();
+      _audioCache.fixedPlayer?.notificationService.startHeadlessService();
     }
   }
 
@@ -49,18 +69,8 @@ class _CoinDetectorState extends State<CoinDetector> {
       stream: _streamController.stream,
       initialData: 'Waiting',
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (_elementKey.currentState != null) {
-          _elementKey.currentState!
-              .insertItem(0, duration: const Duration(milliseconds: 500));
-          _items = [snapshot.data ?? '', ..._items];
-          if (snapshot.data == 'Real') {
-            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-              await _advancedPlayer.play(
-                  'https://www.soundsnap.com/streamers/play2.php?t=l&p=files%2Faudio%2F74%2F274005-Ambient-Game-Score-Clay-Coin-1.mp3');
-            });
-          }
-        }
-        List<Widget> children;
+        // ignore: omit_local_variable_types
+        List<Widget> children = [];
         if (snapshot.hasError) {
           children = errorWidgets(snapshot);
         } else {
@@ -72,7 +82,7 @@ class _CoinDetectorState extends State<CoinDetector> {
               children = waitingWidgets();
               break;
             case ConnectionState.active:
-              children = activeWidgets(snapshot.data);
+              children = [];
               break;
             case ConnectionState.done:
               children = doneWidgets(snapshot.data);
@@ -83,22 +93,22 @@ class _CoinDetectorState extends State<CoinDetector> {
           child: Scaffold(
             appBar: CustomAppBar(
               title: snapshot.data ?? '',
-              isSelected: isSelected,
+              toggleValue: _toggleValue,
               toggleAction: toggleAction,
               size: context.height * 8,
             ),
-            body: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Expanded(
-                  child: AnimatedList(
+            body: children.isEmpty
+                ? AnimatedList(
                     key: _elementKey,
                     initialItemCount: _items.length,
                     itemBuilder: slideAnimation,
+                  )
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: children,
+                    ),
                   ),
-                ),
-              ],
-            ),
           ),
         );
       },
@@ -118,13 +128,30 @@ class _CoinDetectorState extends State<CoinDetector> {
           reverseCurve: Curves.easeOut)),
       child: FadeTransition(
         opacity: animation,
-        child: SizedBox(
-          height: 128.0,
-          child: Card(
-            color: item == 'Real' ? Colors.green : Colors.red,
-            child: Center(
-              child: Text('Item $item',
-                  style: Theme.of(context).textTheme.headline4!),
+        child: Card(
+          color: item == 'Real' ? Colors.green : Colors.red,
+          child: ExpansionTile(
+            title: Container(
+              alignment: Alignment.center,
+              height: context.height * 10,
+              child: Text(
+                'Item $item',
+                style: Theme.of(context).textTheme.headline4!,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            children: [
+              Text(
+                'asdsad',
+                textAlign: TextAlign.center,
+              )
+            ],
+            trailing: RotationTransition(
+              turns: _animationController.drive(_halfTween.chain(_easeInTween)),
+              child: Padding(
+                padding: context.topLowMed,
+                child: const Icon(Icons.expand_more),
+              ),
             ),
           ),
         ),
@@ -132,18 +159,16 @@ class _CoinDetectorState extends State<CoinDetector> {
     );
   }
 
-  void toggleAction(int index) {
-    if (index == 0 && _streamSubscription.isPaused) {
+  void toggleAction() {
+    if (_toggleValue && _streamSubscription.isPaused) {
       _streamSubscription.resume();
-    } else if (index == 1 && !_streamSubscription.isPaused) {
+    } else if (!_toggleValue && !_streamSubscription.isPaused) {
       _streamSubscription.pause();
     } else {
       return;
     }
     setState(() {
-      for (var butIndex = 0; butIndex < isSelected.length; butIndex++) {
-        isSelected[butIndex] = butIndex == index;
-      }
+      _toggleValue = !_toggleValue;
     });
   }
 
@@ -175,28 +200,14 @@ class _CoinDetectorState extends State<CoinDetector> {
         )
       ];
 
-  List<Widget> waitingWidgets() => const <Widget>[
-        SizedBox(
-          child: CircularProgressIndicator(),
-          width: 60,
-          height: 60,
-        ),
+  List<Widget> waitingWidgets() => <Widget>[
+        const Spacer(),
         Padding(
-          padding: EdgeInsets.only(top: 16),
-          child: Text('Awaiting bids...'),
-        )
-      ];
-
-  List<Widget> activeWidgets(String? data) => <Widget>[
-        const Icon(
-          Icons.check_circle_outline,
-          color: Colors.green,
-          size: 60,
+          padding: context.verticalMedium,
+          child: const CircularProgressIndicator(),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: Text(data ?? 'Real'),
-        )
+        const Text('Waiting for the data...'),
+        const Spacer(),
       ];
 
   List<Widget> doneWidgets(String? data) => <Widget>[
