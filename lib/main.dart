@@ -1,5 +1,6 @@
-import 'package:bstevr_assessment/view/coin-detector/automated_coin_detector.dart';
 import 'package:flutter/material.dart';
+
+import 'view/coin-detector/automated_coin_detector.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: const CoinDetector(),
     );
   }

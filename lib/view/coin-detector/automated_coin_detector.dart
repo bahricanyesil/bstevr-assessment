@@ -1,6 +1,12 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/core_shelf.dart';
 
 class CoinDetector extends StatefulWidget {
   const CoinDetector({Key? key}) : super(key: key);
@@ -13,23 +19,46 @@ class _CoinDetectorState extends State<CoinDetector> {
   final GlobalKey<AnimatedListState> _elementKey =
       GlobalKey<AnimatedListState>();
   List<String> _items = [];
-  final Stream<String> randomStream =
+  final Stream<String> _randomStream =
       Stream.periodic(const Duration(seconds: 3), (int val) {
     final random = Random().nextInt(2);
     return random == 0 ? 'Real' : 'Fake';
   });
+  final List<bool> isSelected = [true, false];
+  final StreamController _streamController = StreamController.broadcast();
+  late StreamSubscription<String> _streamSubscription;
+  final AudioPlayer _advancedPlayer = AudioPlayer();
+
+  @override
+  void initState() {
+    super.initState();
+    _streamSubscription = _randomStream.listen(_streamController.add);
+
+    if (kIsWeb) {
+      // Calls to Platform.isIOS fails on web
+      return;
+    }
+    if (Platform.isIOS) {
+      _advancedPlayer.notificationService.startHeadlessService();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<String>(
-      stream: randomStream,
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+    return StreamBuilder<dynamic>(
+      stream: _streamController.stream,
+      initialData: 'Waiting',
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (_elementKey.currentState != null) {
           _elementKey.currentState!
               .insertItem(0, duration: const Duration(milliseconds: 500));
-          _items = []
-            ..add(snapshot.data ?? '')
-            ..addAll(_items);
+          _items = [snapshot.data ?? '', ..._items];
+          if (snapshot.data == 'Real') {
+            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+              await _advancedPlayer.play(
+                  'https://www.soundsnap.com/streamers/play2.php?t=l&p=files%2Faudio%2F74%2F274005-Ambient-Game-Score-Clay-Coin-1.mp3');
+            });
+          }
         }
         List<Widget> children;
         if (snapshot.hasError) {
@@ -50,21 +79,26 @@ class _CoinDetectorState extends State<CoinDetector> {
               break;
           }
         }
-        return Scaffold(
-          body: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: AnimatedList(
-                  key: _elementKey,
-                  initialItemCount: _items.length,
-                  itemBuilder: (BuildContext context, int index,
-                      Animation<double> animation) {
-                    return slideAnimation(context, index, animation);
-                  },
+        return SafeArea(
+          child: Scaffold(
+            appBar: CustomAppBar(
+              title: snapshot.data ?? '',
+              isSelected: isSelected,
+              toggleAction: toggleAction,
+              size: context.height * 8,
+            ),
+            body: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Expanded(
+                  child: AnimatedList(
+                    key: _elementKey,
+                    initialItemCount: _items.length,
+                    itemBuilder: slideAnimation,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -73,7 +107,7 @@ class _CoinDetectorState extends State<CoinDetector> {
 
   Widget slideAnimation(
       BuildContext context, int index, Animation<double> animation) {
-    String item = _items[index];
+    var item = _items[index];
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(1, 0),
@@ -96,6 +130,21 @@ class _CoinDetectorState extends State<CoinDetector> {
         ),
       ),
     );
+  }
+
+  void toggleAction(int index) {
+    if (index == 0 && _streamSubscription.isPaused) {
+      _streamSubscription.resume();
+    } else if (index == 1 && !_streamSubscription.isPaused) {
+      _streamSubscription.pause();
+    } else {
+      return;
+    }
+    setState(() {
+      for (var butIndex = 0; butIndex < isSelected.length; butIndex++) {
+        isSelected[butIndex] = butIndex == index;
+      }
+    });
   }
 
   List<Widget> errorWidgets(AsyncSnapshot snapshot) => <Widget>[
