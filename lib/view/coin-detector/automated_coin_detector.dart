@@ -64,48 +64,6 @@ class _CoinDetectorState extends State<CoinDetector> {
                   },
                 ),
               ),
-              // Container(
-              //   decoration: BoxDecoration(color: Colors.greenAccent),
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.max,
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: <Widget>[
-              //       FlatButton(
-              //         onPressed: () {
-              //           setState(() {
-              //             _elementKey.currentState!.insertItem(0,
-              //                 duration: const Duration(milliseconds: 500));
-              //             _items = []
-              //               ..add(counter++)
-              //               ..addAll(_items);
-              //           });
-              //         },
-              //         child: Text(
-              //           "Add item to first",
-              //           style: TextStyle(color: Colors.black, fontSize: 20),
-              //         ),
-              //       ),
-              //       FlatButton(
-              //         onPressed: () {
-              //           if (_items.length <= 1) return;
-              //           _elementKey.currentState!.removeItem(
-              //               0,
-              //               (_, animation) =>
-              //                   slideAnimation(context, 0, animation),
-              //               duration: const Duration(milliseconds: 500));
-              //           setState(() {
-              //             _items.removeAt(0);
-              //           });
-              //         },
-              //         child: Text(
-              //           "Remove first item",
-              //           style: TextStyle(color: Colors.black, fontSize: 20),
-              //         ),
-              //       )
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         );
