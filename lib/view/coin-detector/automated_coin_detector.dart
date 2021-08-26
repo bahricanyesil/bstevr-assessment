@@ -19,7 +19,7 @@ class _CoinDetectorState extends State<CoinDetector>
     with SingleTickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _elementKey =
       GlobalKey<AnimatedListState>();
-  List<String> _items = [];
+  final List<dynamic> _items = [];
   late Stream<String> _randomStream;
   bool _toggleValue = false;
   final StreamController _streamController = StreamController.broadcast();
@@ -31,6 +31,8 @@ class _CoinDetectorState extends State<CoinDetector>
       CurveTween(curve: Curves.easeIn);
   static final Animatable<double> _halfTween =
       Tween<double>(begin: 0.0, end: 0.5);
+  final List<dynamic> _expandedKeys = [];
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +41,8 @@ class _CoinDetectorState extends State<CoinDetector>
       if (_elementKey.currentState != null) {
         _elementKey.currentState!
             .insertItem(0, duration: const Duration(milliseconds: 500));
-        _items = [random == 0 ? 'Real' : 'Fake', ..._items];
+        _items.insert(
+            0, {'name': random == 0 ? 'Real' : 'Fake', 'date': DateTime.now()});
         if (random == 0) {
           WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
             final bytes =
@@ -48,6 +51,7 @@ class _CoinDetectorState extends State<CoinDetector>
             await _audioCache.playBytes(bytes);
           });
         }
+        setState(() {});
       }
       return random == 0 ? 'Real' : 'Fake';
     });
@@ -127,35 +131,52 @@ class _CoinDetectorState extends State<CoinDetector>
           curve: Curves.easeIn,
           reverseCurve: Curves.easeOut)),
       child: FadeTransition(
-        opacity: animation,
-        child: Card(
-          color: item == 'Real' ? Colors.green : Colors.red,
-          child: ExpansionTile(
-            title: Container(
-              alignment: Alignment.center,
-              height: context.height * 10,
-              child: Text(
-                'Item $item',
-                style: Theme.of(context).textTheme.headline4!,
-                textAlign: TextAlign.center,
+          opacity: animation,
+          child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter _setState) {
+            Timer.periodic(const Duration(seconds: 1), (timer) {
+              _setState(() {});
+            });
+            return Card(
+              color: item['name'] == 'Real' ? Colors.green : Colors.red,
+              child: ExpansionTile(
+                key: UniqueKey(),
+                initiallyExpanded: _expandedKeys.contains(item),
+                title: Container(
+                  alignment: Alignment.center,
+                  height: context.height * 8,
+                  child: Text(
+                    'Coin is ${item['name']}',
+                    style: Theme.of(context).textTheme.headline4!,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                children: [
+                  Text(
+                    Utils.dateDiffHelper(item['date']),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                onExpansionChanged: (bool val) {
+                  setState(() {
+                    if (val && !_expandedKeys.contains(index)) {
+                      _expandedKeys.add(item);
+                    } else {
+                      _expandedKeys.remove(item);
+                    }
+                  });
+                },
+                trailing: RotationTransition(
+                  turns: _animationController
+                      .drive(_halfTween.chain(_easeInTween)),
+                  child: Padding(
+                    padding: context.topLow,
+                    child: const Icon(Icons.expand_more),
+                  ),
+                ),
               ),
-            ),
-            children: [
-              Text(
-                'asdsad',
-                textAlign: TextAlign.center,
-              )
-            ],
-            trailing: RotationTransition(
-              turns: _animationController.drive(_halfTween.chain(_easeInTween)),
-              child: Padding(
-                padding: context.topLowMed,
-                child: const Icon(Icons.expand_more),
-              ),
-            ),
-          ),
-        ),
-      ),
+            );
+          })),
     );
   }
 
