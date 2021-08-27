@@ -21,10 +21,11 @@ mixin HelperFunctions {
   }
 
   static Stream<String> getRandomStream(GlobalKey<AnimatedListState> key,
-          AudioCache audioCache, List<dynamic> items) =>
+          AudioCache audioCache, List<dynamic> items, BuildContext context) =>
       Stream.periodic(const Duration(seconds: 3), (int val) {
         final random = Random().nextInt(2);
         if (key.currentState != null) {
+          if (items.isEmpty) Navigator.of(context).pop();
           key.currentState!
               .insertItem(0, duration: const Duration(milliseconds: 500));
           items.insert(0,

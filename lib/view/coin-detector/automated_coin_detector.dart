@@ -31,8 +31,8 @@ class _CoinDetectorState extends State<CoinDetector> {
   void initState() {
     super.initState();
     _audioCache = AudioCache(fixedPlayer: _audioPlayer);
-    _randomStream =
-        HelperFunctions.getRandomStream(_elementKey, _audioCache, _items);
+    _randomStream = HelperFunctions.getRandomStream(
+        _elementKey, _audioCache, _items, context);
     _streamSubscription = _randomStream.listen(_streamController.add);
     if (kIsWeb) return;
     if (Platform.isIOS) {
@@ -55,6 +55,11 @@ class _CoinDetectorState extends State<CoinDetector> {
   }
 
   Widget getSafeArea(AsyncSnapshot snapshot, List<Widget> children) {
+    if (children.isEmpty && _items.isEmpty) {
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+        DialogBuilder(context).showLoadingIndicator();
+      });
+    }
     return SafeArea(
       child: Scaffold(
         appBar: getAppBar(snapshot),
