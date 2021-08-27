@@ -1,6 +1,11 @@
+import 'dart:typed_data';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'view/coin-detector/automated_coin_detector.dart';
+
+void main() async {
   runApp(const MyApp());
 }
 
@@ -14,7 +19,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Text('BSTEVR-Assessment'),
+      debugShowCheckedModeBanner: false,
+      home: const CoinDetector(),
     );
   }
 }

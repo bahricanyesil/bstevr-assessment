@@ -1,6 +1,6 @@
-import 'package:bstevr_assessment/core/alphabet_tree.dart';
-import 'package:bstevr_assessment/core/node.dart';
 import "package:flutter_test/flutter_test.dart";
+
+import 'package:bstevr_assessment/core/core_shelf.dart';
 
 void main() {
   group('Alphabet Tree Tests', () {
