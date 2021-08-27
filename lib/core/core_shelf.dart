@@ -1,3 +1,4 @@
+export 'animations/animations_shelf.dart';
 export 'decorations/decorations_shelf.dart';
 export 'extensions/extensions_shelf.dart';
 export 'init/init_shelf.dart';
