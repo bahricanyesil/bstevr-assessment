@@ -225,7 +225,11 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
   DefaultAppBar getAppBar() {
     return DefaultAppBar(size: context.height * 8, children: [
       appBarIcon(Icons.home),
-      appBarIcon(Icons.add),
+      IconButton(
+        icon: appBarIcon(Icons.add),
+        onPressed: () => NavigationService.instance
+            .navigateToPage(path: NavigationConstants.coinDetector),
+      ),
     ]);
   }
 
