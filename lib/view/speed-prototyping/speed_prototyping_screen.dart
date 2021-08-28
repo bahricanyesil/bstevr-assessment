@@ -11,7 +11,10 @@ class SpeedPrototypingScreen extends StatefulWidget {
 }
 
 class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
+  /// To control whether the user tried to exit the app.
   bool triedExit = false;
+
+  /// Information that will be given to the [CircleComponent] widgets.
   List<dynamic> circleComponents = [
     {"widget": '71°', "bottomText": '20%'},
     {"widget": Icons.lock_open_outlined, "bottomText": 'Front Door Unlocked'},
@@ -19,7 +22,11 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     {"widget": Icons.light_outlined, "bottomText": '3 Lights On'},
     {"widget": Icons.kitchen_outlined, "bottomText": 'Kitchen is Clean'},
   ];
+
+  /// List contains the [BottomNavigationBar] items.
   List<BottomNavigationBarItem> bottomItems = [];
+
+  /// Selected value of the [BottomNavigationBar]
   int selectedVal = 0;
 
   @override
@@ -56,6 +63,9 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     );
   }
 
+  /// Returns the children of the column as a list of widgets.
+  /// It contains [Spacer] and [Expanded] widgets for the purpose of responsiveness.
+  /// [SizedBox] widgets exist to give a space between the main widgets. Their heights are controlled dynamically.
   List<Widget> getColumnChildren() {
     return [
       const Spacer(),
@@ -78,6 +88,7 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     );
   }
 
+  /// The list of [CircleComponent] that is displayed in one row with a [ListView], scrolling horizontally.
   Widget circleList() {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
@@ -87,6 +98,7 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     );
   }
 
+  /// The list of [FavoriteSceneItem] that is displayed in two row with a [GridView], scrolling horizontally.
   Widget sceneList() {
     return Padding(
       padding: context.verticalLow,
@@ -103,6 +115,8 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     );
   }
 
+  /// The list of [FavoriteSceneItem] that is displayed in three column with a [GridView], scrolling vertically.
+  /// Because of the time limit, it uses the same elements with [sceneList].
   Widget accessoryList() {
     // ignore: omit_local_variable_types
     List<Widget> children = gridViewChildren();
@@ -122,6 +136,8 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     );
   }
 
+  /// Returns the children of the grid view lists.
+  /// For the experimental purposes contains a constant data for now.
   List<Widget> gridViewChildren() {
     return <Widget>[
       const FavoriteSceneItem(
@@ -145,6 +161,8 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     );
   }
 
+  /// Get the items of the circular list from the [circleComponents] list.
+  /// Creates the corresponding [CircleComponent].
   Widget getListItem(BuildContext context, int index) {
     Widget childWidget;
     if (circleComponents[index]['widget'] is String) {
@@ -194,12 +212,14 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     );
   }
 
+  /// Custom On Will Pop function to avoid directly closing the app when user clicked the back button.
   Future<bool> customOnWillPop() async {
     triedExit = !triedExit;
     if (!triedExit) return true;
     return false;
   }
 
+  /// [BottomNavigationBar] object with custom settings and [bottomItems].
   BottomNavigationBar getBottomBar() {
     return BottomNavigationBar(
       items: bottomItems,
@@ -222,6 +242,7 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     );
   }
 
+  /// Creates the [DefaultAppBar] widget with custom settings.
   DefaultAppBar getAppBar() {
     return DefaultAppBar(size: context.height * 8, children: [
       appBarIcon(Icons.home),

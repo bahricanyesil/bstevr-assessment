@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Provides an easy access to the main fields in ThemeData.
+/// Contains primary color types and textStyles, can be extended with custom values.
 extension ThemeExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
   Color get primaryColor => theme.primaryColor;

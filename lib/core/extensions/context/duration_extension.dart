@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Predefined duration types for unity purpose.
 extension DurationExtension on BuildContext {
   Duration get tooFast => const Duration(milliseconds: 200);
   Duration get fast => const Duration(milliseconds: 500);

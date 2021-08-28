@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../../core/core_shelf.dart';
 
+/// Circle Component to display the top part of the screen.
 class CircleComponent extends StatelessWidget {
+  /// Extra icon that will be displayed at the right bottom of the [childWidget]
   final IconData? extraIcon;
+
+  /// Bottom icon that will be displayed before the [bottomText]
   final IconData? bottomIcon;
+
+  /// Bottom text that will be displayed under the [childWidget]
   final String bottomText;
+
+  /// The main widget which fills the inside of the component
   final Widget childWidget;
   const CircleComponent({
     Key? key,
@@ -25,6 +33,7 @@ class CircleComponent extends StatelessWidget {
     );
   }
 
+  /// Returns the bottom icon with a custom padding and visibility option.
   Widget getBottomIcon(BuildContext context) {
     return Visibility(
       visible: bottomIcon != null,
@@ -35,6 +44,7 @@ class CircleComponent extends StatelessWidget {
     );
   }
 
+  /// Returns the bottom text with a custom style.
   Widget getBottomText(BuildContext context) {
     return Text(
       bottomText,

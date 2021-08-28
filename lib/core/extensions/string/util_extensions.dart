@@ -1,3 +1,4 @@
+/// String extension provides functional utils can be used in any place.
 extension UtilExtension on String {
   String get turkishCharToEnglish {
     return replaceAll(RegExp(r'Ğ'), 'G')

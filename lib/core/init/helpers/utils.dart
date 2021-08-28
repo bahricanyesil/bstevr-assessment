@@ -1,3 +1,4 @@
+/// Util functions that can be used in any screen/widget.
 mixin Utils {
   static String dateDiffHelper(DateTime date, [DateTime? now]) {
     var diff = (now ?? DateTime.now()).difference(date);

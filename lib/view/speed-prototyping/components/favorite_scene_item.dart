@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../core/core_shelf.dart';
 
+/// Favorite Scene Item to display scenes.
 class FavoriteSceneItem extends StatelessWidget {
+  /// Indicates whether the item is selected.
   final bool selected;
+
+  /// Icon that is displayed at the beginning of the item.
   final IconData icon;
+
+  /// Text that explains the information about the item.
   final String text;
   const FavoriteSceneItem({
     Key? key,
@@ -24,6 +30,7 @@ class FavoriteSceneItem extends StatelessWidget {
     );
   }
 
+  /// The main widget inside of the container, contains other widgets as its children.
   Widget getRow(BuildContext context) {
     return Row(
       children: [
@@ -34,6 +41,7 @@ class FavoriteSceneItem extends StatelessWidget {
     );
   }
 
+  /// Returns the explanation text with a custom style and overflow option.
   Widget getText(BuildContext context) {
     return Text(
       text,

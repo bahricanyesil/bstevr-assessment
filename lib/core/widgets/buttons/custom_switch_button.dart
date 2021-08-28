@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../core_shelf.dart';
 
+/// Custom Switch Button to be able to switch between two option.
 class CustomSwitchButton extends StatelessWidget {
+  /// Toggle value that will be displayed
   final bool toggleValue;
+
+  /// Toggle action that will be performed when clicked.
   final Function() toggleAction;
   const CustomSwitchButton(
       {Key? key, required this.toggleValue, required this.toggleAction})
@@ -20,6 +24,7 @@ class CustomSwitchButton extends StatelessWidget {
     );
   }
 
+  /// The button that will be shown in the container.
   Widget getButton(BuildContext context) => InkWell(
         onTap: toggleAction,
         child: toggleValue
@@ -29,6 +34,7 @@ class CustomSwitchButton extends StatelessWidget {
                 context, 'Pause', Icons.stop_circle_outlined, Colors.red),
       );
 
+  /// Returns the icon button acc. to [text] value as 'Resume' or 'Pause'.
   Widget getIconButton(BuildContext context, String text, IconData icon,
           Color primaryColor) =>
       Row(
@@ -36,14 +42,18 @@ class CustomSwitchButton extends StatelessWidget {
             text == 'Resume' ? MainAxisAlignment.start : MainAxisAlignment.end,
         children: [
           getButtonText(context, text == 'Pause', text),
-          ElevatedButton(
-              onPressed: toggleAction,
-              child: Icon(icon, color: Colors.white),
-              style:
-                  ButtonStyles.customSwitchButtonStyle(context, primaryColor)),
+          getElevatedButton(context, icon, primaryColor),
           getButtonText(context, text == 'Resume', text),
         ],
       );
+
+  Widget getElevatedButton(
+      BuildContext context, IconData icon, Color primaryColor) {
+    return ElevatedButton(
+        onPressed: toggleAction,
+        child: Icon(icon, color: Colors.white),
+        style: ButtonStyles.customSwitchButtonStyle(context, primaryColor));
+  }
 
   Widget getButtonText(BuildContext context, bool visible, String text) =>
       Visibility(

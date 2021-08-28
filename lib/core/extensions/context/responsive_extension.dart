@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import './context_extensions_shelf.dart';
 
+/// Predefined width and height values for responsive design.
+/// Uses 1/100 of pixel for both width and height and multiply with custom values.
+/// Contains also a fontSize value for responsive texts.
 extension ResponsiveExtension on BuildContext {
   double get height => mediaQuery.size.height * 0.01;
   double get width => mediaQuery.size.width * 0.01;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// String extension provides an easy access to the files in the assets.
 extension ImagePathExtension on String {
   String get toSVG => 'assets/svg/$this.svg';
 

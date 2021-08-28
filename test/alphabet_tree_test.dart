@@ -4,6 +4,8 @@ import 'package:bstevr_assessment/core/core_shelf.dart';
 
 void main() {
   group('Alphabet Tree Tests', () {
+    /// Tests the compareTree function
+    /// Checks whether it correctly gives the unique characters.
     test("Sets should be exactly the same with the given ones.", () {
       final root1 = Node("Z", [
         Node("T", [
@@ -46,6 +48,8 @@ void main() {
       expect(set3, {"B", "D", "I", "K", "L", "M", "N", "P", "Q", "Y"});
     });
 
+    /// Tests the addNode function
+    /// Checks whether it correctly adds the node to the tree.
     test("Node creation test", () {
       final parentNode = Node("S", [Node("L", [])]);
       final root1 = Node("Z", [
@@ -67,6 +71,8 @@ void main() {
       expect(tree.compareAll(AlphabetTree(finalRoot)), true);
     });
 
+    /// Tests the removeNode function
+    /// Checks whether it correctly removes the node from the tree.
     test("Node deletion test", () {
       final deleteNode = Node("S", [Node("L", [])]);
       final root1 = Node("Z", [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Mixin for slideTransition animations, contains different type of animations.
 mixin SlideTransitionAnimations {
   static Animation<Offset> coinDetectorAnimation(Animation<double> animation) =>
       Tween<Offset>(

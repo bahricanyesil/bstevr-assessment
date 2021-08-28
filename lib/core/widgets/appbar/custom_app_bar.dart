@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../core_shelf.dart';
 
+/// Customized App Bar widget implements [PreferredSizeWidget] and its required functions.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  /// Title of the app will be displayed at top left.
   final String title;
+
+  /// Toggle action that will be performed on switch operation on switch button.
   final Function()? toggleAction;
+
+  /// Toggle value to understand corresponding switch value.
   final bool? toggleValue;
+
+  /// Height of the app bar.
   final double size;
   const CustomAppBar({
     Key? key,
@@ -25,6 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  /// Returns title's text widget with customized TextStyle.
   Widget getTitle(BuildContext context) => AutoSizeText(
         title,
         style: TextStyle(
@@ -34,6 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       );
 
+  /// Returns main container with a different value acc. to whether there is a switch button.
   Widget getMainContainer(BuildContext context) => Center(
         child: toggleValue == null
             ? Container()
@@ -43,6 +53,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
       );
 
+  /// Overrides the [preferredSize] field with a given height value [size].
   @override
   Size get preferredSize => Size.fromHeight(size);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+/// Predefined media query values for easy access.
 extension MediaQueryExtension on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 
