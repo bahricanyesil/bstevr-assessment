@@ -41,24 +41,12 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
     return Scaffold(
       bottomNavigationBar: getBottomBar(),
       appBar: getAppBar(),
-      body: LayoutBuilder(builder: scrollContent),
+      body: LayoutBuilder(builder: getColumn),
       backgroundColor: Colors.blueAccent,
     );
   }
 
-  Widget scrollContent(BuildContext context, BoxConstraints constraints) {
-    return SingleChildScrollView(
-      physics: context.viewBottomPad > 0
-          ? const BouncingScrollPhysics()
-          : const NeverScrollableScrollPhysics(),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: context.height * 100),
-        child: getColumn(),
-      ),
-    );
-  }
-
-  Widget getColumn() {
+  Widget getColumn(BuildContext context, BoxConstraints constraints) {
     return Padding(
       padding: context.leftMedHigh,
       child: Column(
@@ -71,11 +59,12 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
   List<Widget> getColumnChildren() {
     return [
       const Spacer(),
-      Expanded(flex: 2, child: myHomeText()),
+      Expanded(flex: 3, child: myHomeText()),
       SizedBox(height: context.height * 2),
-      Expanded(flex: 5, child: circleList()),
+      Expanded(flex: 8, child: circleList()),
+      SizedBox(height: context.height * 2),
       Expanded(flex: 2, child: getTitle('Favorite Scenes')),
-      Expanded(flex: 7, child: sceneList()),
+      Expanded(flex: 10, child: sceneList()),
       Expanded(flex: 2, child: getTitle('Favorite Accessories')),
       Expanded(flex: 16, child: accessoryList()),
       const Spacer(),
@@ -115,6 +104,9 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
   }
 
   Widget accessoryList() {
+    // ignore: omit_local_variable_types
+    List<Widget> children = gridViewChildren();
+    children.addAll(gridViewChildren());
     return Padding(
       padding: context.verticalLow.copyWith(right: context.medHighWidth),
       child: GridView.count(
@@ -125,7 +117,7 @@ class _SpeedPrototypingScreenState extends State<SpeedPrototypingScreen> {
         physics: const BouncingScrollPhysics(),
         childAspectRatio: 10 / 11,
         scrollDirection: Axis.vertical,
-        children: gridViewChildren(),
+        children: children,
       ),
     );
   }
