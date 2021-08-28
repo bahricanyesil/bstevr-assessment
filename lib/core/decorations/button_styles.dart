@@ -11,5 +11,6 @@ mixin ButtonStyles {
         fixedSize: Size(context.height * 6, context.height * 6),
         padding: EdgeInsets.zero,
         minimumSize: Size.zero,
+        animationDuration: context.tooSlow,
       );
 }

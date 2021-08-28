@@ -76,7 +76,7 @@ class _CoinCardState extends State<CoinCard>
   Widget _getTitle() => Container(
         alignment: Alignment.center,
         height: context.height * 8,
-        child: Text(
+        child: AutoSizeText(
           'Coin is ${widget.item['name']}',
           style: Theme.of(context).textTheme.headline4!,
           textAlign: TextAlign.center,
@@ -84,7 +84,7 @@ class _CoinCardState extends State<CoinCard>
       );
 
   List<Widget> _getChildren() => [
-        Text(
+        AutoSizeText(
           Utils.dateDiffHelper(widget.item['date']),
           textAlign: TextAlign.center,
         ),

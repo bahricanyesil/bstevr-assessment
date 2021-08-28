@@ -9,14 +9,14 @@ import '../../core/core_shelf.dart';
 import 'components/components_shelf.dart';
 import 'functions/functions_shelf.dart';
 
-class CoinDetector extends StatefulWidget {
-  const CoinDetector({Key? key}) : super(key: key);
+class CoinDetectorScreen extends StatefulWidget {
+  const CoinDetectorScreen({Key? key}) : super(key: key);
 
   @override
-  _CoinDetectorState createState() => _CoinDetectorState();
+  _CoinDetectorScreenState createState() => _CoinDetectorScreenState();
 }
 
-class _CoinDetectorState extends State<CoinDetector> {
+class _CoinDetectorScreenState extends State<CoinDetectorScreen> {
   final GlobalKey<AnimatedListState> _elementKey =
       GlobalKey<AnimatedListState>();
   final List<dynamic> _items = [];

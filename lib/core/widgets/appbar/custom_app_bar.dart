@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../core_shelf.dart';
+import '../../core_shelf.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final Function() toggleAction;
-  final bool toggleValue;
+  final Function()? toggleAction;
+  final bool? toggleValue;
   final double size;
   const CustomAppBar({
     Key? key,
     required this.title,
-    required this.toggleAction,
-    required this.toggleValue,
+    this.toggleAction,
+    this.toggleValue,
     required this.size,
   }) : super(key: key);
 
@@ -25,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget getTitle(BuildContext context) => Text(
+  Widget getTitle(BuildContext context) => AutoSizeText(
         title,
         style: TextStyle(
           color: context.primaryColor,
@@ -35,8 +35,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
 
   Widget getMainContainer(BuildContext context) => Center(
-        child: CustomSwitchButton(
-            toggleValue: toggleValue, toggleAction: toggleAction),
+        child: toggleValue == null
+            ? Container()
+            : CustomSwitchButton(
+                toggleValue: toggleValue!,
+                toggleAction: toggleAction!,
+              ),
       );
 
   @override

@@ -1,4 +1,4 @@
-package com.bstevr.assessment.bstevr_assessment
+package com.bstevr.assessment
 
 import io.flutter.embedding.android.FlutterActivity
 

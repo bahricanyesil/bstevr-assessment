@@ -1,9 +1,6 @@
-import 'dart:typed_data';
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
-import 'view/coin-detector/automated_coin_detector.dart';
+import 'core/core_shelf.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -20,7 +17,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const CoinDetector(),
+      onGenerateRoute: NavigationRoute.instance.generateRoute,
+      navigatorKey: NavigationService.instance.navigatorKey,
     );
   }
 }

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bstevr.assessment.bstevr_assessment">
+    package="com.bstevr.assessment">
    <application
         android:label="bstevr_assessment"
         android:icon="@mipmap/ic_launcher">

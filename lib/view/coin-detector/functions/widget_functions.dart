@@ -31,9 +31,11 @@ mixin CoinDetectorWidgetFunctions {
           size: context.width * 20,
         ),
         const Spacer(flex: 2),
-        Expanded(flex: 3, child: Text('Error: ${snapshot.error}')),
+        Expanded(flex: 3, child: AutoSizeText('Error: ${snapshot.error}')),
         const Spacer(),
-        Expanded(flex: 3, child: Text('Stack trace: ${snapshot.stackTrace}')),
+        Expanded(
+            flex: 3,
+            child: AutoSizeText('Stack trace: ${snapshot.stackTrace}')),
         const Spacer(flex: 30),
       ];
 
@@ -45,7 +47,7 @@ mixin CoinDetectorWidgetFunctions {
           size: context.width * 25,
         ),
         const Spacer(flex: 2),
-        const Text('Select a lot'),
+        const AutoSizeText('Select a lot'),
         const Spacer(flex: 30),
       ];
 
