@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'l_navigation_service.dart';
 
+/// Navigation service that takes some arguments and navigates with the help of navigatorKey.
 class NavigationService implements INavigationService {
   static final NavigationService _instance = NavigationService._init();
   static NavigationService get instance => _instance;

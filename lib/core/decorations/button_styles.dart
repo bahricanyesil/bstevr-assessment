@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core_shelf.dart';
 
+/// Mixin for button styles, contains specialized styles for each button.
 mixin ButtonStyles {
   static customSwitchButtonStyle(BuildContext context, Color primaryColor) =>
       ElevatedButton.styleFrom(

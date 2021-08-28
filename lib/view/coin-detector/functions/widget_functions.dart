@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../core/core_shelf.dart';
 
+/// Widget Functions that returns some predefined widgets acc. to the snapshot data.
 mixin CoinDetectorWidgetFunctions {
+  /// Gets the corresponding children list acc. to the status of snapshot.
   static List<Widget> childrenBySnapshot(
       AsyncSnapshot snapshot, BuildContext context) {
     if (snapshot.hasError) {
@@ -21,6 +23,7 @@ mixin CoinDetectorWidgetFunctions {
     }
   }
 
+  /// When the snapshot has error, displays a error icon and the specific error message.
   static List<Widget> _errorWidgets(
           AsyncSnapshot snapshot, BuildContext context) =>
       <Widget>[
@@ -51,6 +54,7 @@ mixin CoinDetectorWidgetFunctions {
         const Spacer(flex: 30),
       ];
 
+  /// When the data flow is done, indicates that the stream is closed.
   static List<Widget> _doneWidgets(String? data, BuildContext context) =>
       <Widget>[
         const Spacer(flex: 30),

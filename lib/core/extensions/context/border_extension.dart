@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../core_shelf.dart';
 
+/// Extensions on context
+
+/// Predefined border radius types.
 extension BorderRadiusExtension on BuildContext {
   BorderRadius get lowCircular => BorderRadius.circular(8);
   BorderRadius get mediumCircular => BorderRadius.circular(15);
@@ -10,6 +13,7 @@ extension BorderRadiusExtension on BuildContext {
   BorderRadius get extremeCircular => BorderRadius.circular(40);
 }
 
+/// Predefined radius values.
 extension BorderRadiusOnlyExtensionn on BuildContext {
   Radius get lowRadius => const Radius.circular(8);
   Radius get medRadius => const Radius.circular(15);
@@ -18,6 +22,7 @@ extension BorderRadiusOnlyExtensionn on BuildContext {
   Radius get extremeRadius => const Radius.circular(40);
 }
 
+/// Predefined shape border values.
 extension ShapeBorderExtension on BuildContext {
   ShapeBorder get roundedRectangularLow =>
       RoundedRectangleBorder(borderRadius: lowCircular);
@@ -29,6 +34,7 @@ extension ShapeBorderExtension on BuildContext {
       RoundedRectangleBorder(borderRadius: extremeCircular);
 }
 
+/// Predefined border side types.
 extension BorderSideExtension on BuildContext {
   BorderSide get defaultBlack =>
       BorderSide(color: Colors.black26, width: width * .05);
@@ -36,6 +42,7 @@ extension BorderSideExtension on BuildContext {
       BorderSide(color: primaryColor, width: width * .07);
 }
 
+/// Predefined box border types.
 extension BoxBorderExtension on BuildContext {
   BoxBorder get defaultBlackBoxBorder =>
       Border.all(color: Colors.black26, width: width * .05);

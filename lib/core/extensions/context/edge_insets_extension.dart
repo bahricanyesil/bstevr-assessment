@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../core_shelf.dart';
 
+/// Predefined edge insets values for both padding and margin.
+/// Contains both symmetric, only and all edge insets values.
+/// Uses predefined low-lowMed-med-medHigh-high-extreme width and values from
+/// [ResponsiveExtension]
 extension AllEdgeInsetsExtension on BuildContext {
   EdgeInsets get lowEdgeInsets => EdgeInsets.all(lowWidth);
   EdgeInsets get lowMedEdgeInsets => EdgeInsets.all(lowMedWidth);

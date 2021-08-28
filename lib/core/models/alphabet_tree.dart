@@ -4,11 +4,17 @@ import 'package:flutter/cupertino.dart';
 
 import 'node.dart';
 
+/// Alphabet Tree class, contains only a root field.
 class AlphabetTree {
+  /// Stores the root node.
   final Node root;
 
   const AlphabetTree(this.root);
 
+  /// Takes another tree as an argument and compares its nodes.
+  /// Comparison is performed using Depth First Search algorithm by [getElementsWithDFS]
+  /// After storing the elements of both trees, unite their unique chars and creates a [SplayTreeSet],
+  /// BTW, prints all unique chars.
   Set<String> compareTrees(AlphabetTree tree) {
     final firstTreeElements = SplayTreeSet<String>.from({tree.root.value});
     final secondTreeElements = SplayTreeSet<String>.from({root.value});
@@ -21,6 +27,7 @@ class AlphabetTree {
     return uniqueChars;
   }
 
+  /// Stores all elements in a set using DFS.
   void getElementsWithDFS(Node otherRoot, SplayTreeSet<String> elements) {
     for (var i = 0; i < otherRoot.children.length; i++) {
       elements.add(otherRoot.children[i].value);
@@ -28,6 +35,7 @@ class AlphabetTree {
     }
   }
 
+  /// Adds a node to the specific place by using the given [parentKey].
   void addNode({required Key parentKey, required Node newNode, Node? node}) {
     node ??= root;
     for (var i = 0; i < node.children.length; i++) {
@@ -39,6 +47,8 @@ class AlphabetTree {
     }
   }
 
+  /// Removes a node from the specific place by using the given [nodeKey].
+  /// Replaces the removed node with its children.
   void removeNode({required Key nodeKey, Node? node}) {
     node ??= root;
     for (var i = 0; i < node.children.length; i++) {
@@ -54,6 +64,8 @@ class AlphabetTree {
     }
   }
 
+  /// Compares all nodes of the tree with another [tree] given as argument.
+  /// Uses [compareDfs] method to traverse all nodes with DFS.
   bool compareAll(AlphabetTree tree) {
     if (tree.root.value != root.value) {
       return false;
@@ -61,6 +73,7 @@ class AlphabetTree {
     return compareDfs(tree.root, root);
   }
 
+  /// Compares all nodes recursively until finding a different node or reaching to the leaf nodes.
   bool compareDfs(Node node, Node otherNode) {
     for (var i = 0; i < node.children.length; i++) {
       if (node.children[i].value != otherNode.children[i].value) {

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../core_shelf.dart';
 
+/// Dialog Builder class helps to show a dialog on a screen.
 class DialogBuilder {
-  DialogBuilder(this.context);
-
   final BuildContext context;
+  const DialogBuilder(this.context);
 
+  /// Shows a loading dialog by using the [LoadingIndicator] widget as its content.
   void showLoadingIndicator() {
     showDialog(
       context: context,
@@ -23,12 +24,9 @@ class DialogBuilder {
       },
     );
   }
-
-  void hideOpenDialog() {
-    Navigator.of(context).pop();
-  }
 }
 
+/// Loading Indicator widget contains a circular progress indicator and loading text.
 class LoadingIndicator extends StatelessWidget {
   const LoadingIndicator({Key? key}) : super(key: key);
 
@@ -48,6 +46,7 @@ class LoadingIndicator extends StatelessWidget {
     );
   }
 
+  /// Circular progress indicator with custom settings and padding.
   Padding _getLoadingIndicator(BuildContext context) {
     return Padding(
       padding: context.bottomMedium,
@@ -64,6 +63,7 @@ class LoadingIndicator extends StatelessWidget {
     );
   }
 
+  /// Loading text with a custom padding and settings.
   Widget _getHeading(BuildContext context) {
     return Padding(
       padding: context.bottomLow,

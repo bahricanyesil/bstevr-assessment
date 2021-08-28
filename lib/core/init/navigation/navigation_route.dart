@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../../view/view_shelf.dart';
 import '../../core_shelf.dart';
 
+/// Main place that navigation is performed acc. to the argument name.
 class NavigationRoute {
   static final NavigationRoute _instance = NavigationRoute._init();
   static NavigationRoute get instance => _instance;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core_shelf.dart';
 
+/// Mixin for box decorations, contains specialized box decorations.
 mixin BoxDecorations {
   static BoxDecoration customSwitchDeco(
           BuildContext context, bool toggleValue) =>

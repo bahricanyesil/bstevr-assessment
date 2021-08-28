@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core_shelf.dart';
 
+/// Predefined button styles for easy access with context.
 extension ButtonStyleExtension on BuildContext {
   ButtonStyle get cancelStyle => ElevatedButton.styleFrom(
         primary: canvasColor.withOpacity(.9),
