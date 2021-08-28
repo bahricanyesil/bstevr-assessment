@@ -48,5 +48,6 @@ class CustomSwitchButton extends StatelessWidget {
   Widget getButtonText(BuildContext context, bool visible, String text) =>
       Visibility(
           visible: visible,
-          child: Padding(padding: context.horizontalLowMed, child: Text(text)));
+          child: Padding(
+              padding: context.horizontalLowMed, child: AutoSizeText(text)));
 }

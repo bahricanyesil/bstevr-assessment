@@ -17,7 +17,7 @@ class NavigationRoute {
       case NavigationConstants.speedPrototyping:
         return normalNavigate(const SpeedPrototypingScreen());
       default:
-        return normalNavigate(const CoinDetectorScreen());
+        return normalNavigate(const SpeedPrototypingScreen());
     }
   }
 
